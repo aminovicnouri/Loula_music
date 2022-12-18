@@ -7,27 +7,53 @@ import com.aminovic.loula.data.remote.dto.chart.ChartDto
 import com.aminovic.loula.data.remote.dto.genre.GenreDataDto
 import com.aminovic.loula.data.remote.dto.radio.RadiosDataDto
 import com.aminovic.loula.domain.repository.MusicRepository
+import com.aminovic.loula.domain.utils.Resource
 
 class MusicRepositoryImpl(
     private val musicApi: MusicApi
 ) : MusicRepository {
-    override suspend fun getGenres(): GenreDataDto {
-        return musicApi.getGenres()
+    override suspend fun getGenres(): Resource<GenreDataDto> {
+        return try {
+            Resource.Success(data = musicApi.getGenres())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
     }
 
-    override suspend fun getAlbum(id: Int): AlbumDto {
-        return musicApi.getAlbum(id = id)
+    override suspend fun getAlbum(id: Int): Resource<AlbumDto> {
+        return try {
+            Resource.Success(data = musicApi.getAlbum(id = id))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
     }
 
-    override suspend fun getArtist(id: Int): ArtistDto {
-        return musicApi.getArtist(id)
+    override suspend fun getArtist(id: Int): Resource<ArtistDto> {
+        return try {
+            Resource.Success(data = musicApi.getArtist(id))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
     }
 
-    override suspend fun getChart(id: Int): ChartDto {
-        return musicApi.getChart(id = id)
+    override suspend fun getChart(id: Int): Resource<ChartDto> {
+        return try {
+            Resource.Success(data = musicApi.getChart(id = id))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
     }
 
-    override suspend fun getRadios(): RadiosDataDto {
-        return musicApi.getRadios()
+    override suspend fun getRadios(): Resource<RadiosDataDto> {
+        return try {
+            Resource.Success(data = musicApi.getRadios())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
     }
 }

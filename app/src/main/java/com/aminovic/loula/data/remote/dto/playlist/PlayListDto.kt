@@ -4,7 +4,7 @@ import com.aminovic.loula.data.remote.dto.user.UserDto
 import com.squareup.moshi.Json
 
 data class PlayListDto(
-    @field:Json(name = "id") var id: Int? = null,
+    @field:Json(name = "id") var id: Long? = null,
     @field:Json(name = "title") var title: String? = null,
     @field:Json(name = "public") var public: Boolean? = null,
     @field:Json(name = "nb_tracks") var nbTracks: Int? = null,

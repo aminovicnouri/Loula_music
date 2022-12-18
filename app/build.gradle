@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.aminovic.loula"
-        minSdk 23
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -63,11 +63,15 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
+    implementation "androidx.window:window:1.0.0"
+    implementation 'androidx.palette:palette:1.0.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0'
+
 
     // Compose Navigation
     implementation "androidx.navigation:navigation-compose:2.6.0-alpha04"
+
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
