@@ -98,10 +98,11 @@ fun DiscoverScreen(
                 album?.tracks?.data?.let { tracks ->
                     items(tracks) { item: TrackDto ->
                         TrackListItem(
-                            modifier = Modifier.fillMaxWidth(),
                             track = item,
                             onClick = {},
-                            playPauseTrack = { }
+                            playPauseTrack = { },
+                            modifier = Modifier.fillMaxWidth(),
+                            backgroundColor = MaterialTheme.colors.surface
                         )
                     }
                 }

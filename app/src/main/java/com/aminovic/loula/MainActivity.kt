@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.aminovic.loula.presentation.screens.profile.ProfileScreen
 import com.aminovic.loula.presentation.screens.Screens
 import com.aminovic.loula.presentation.screens.home.HomeScreen
+import com.aminovic.loula.presentation.screens.profile.ProfileScreen
 import com.aminovic.loula.presentation.ui.theme.LOULATheme
 import com.aminovic.loula.presentation.utils.DevicePosture
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -90,6 +90,7 @@ class MainActivity : ComponentActivity() {
                                 artistName = artistName,
                                 artistTrackList = artistTrackList,
                                 navigateToPlayer = { },
+                                onBackPress = { navController.popBackStack() }
                             )
                         }
                     }

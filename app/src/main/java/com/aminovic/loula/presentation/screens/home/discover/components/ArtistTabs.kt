@@ -33,7 +33,7 @@ fun ArtistTabs(
                 onClick = { onArtistSelected(artist) }) {
                 ArtistCard(
                     text = artist.name ?: "Unknown",
-                    image = artist.pictureMedium,
+                    image = artist.pictureBig,
                     selected = index == selectedIndex,
                     modifier = Modifier.padding(
                         horizontal = spacing.spaceExtraSmall,

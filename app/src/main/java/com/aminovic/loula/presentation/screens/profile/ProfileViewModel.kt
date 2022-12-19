@@ -51,7 +51,7 @@ class ProfileViewModel @Inject constructor(
     }
 
 
-    fun getArtistTracks(id: Int) {
+    private fun getArtistTracks(id: Int) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoading = true
@@ -75,5 +75,4 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-
 }

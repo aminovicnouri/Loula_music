@@ -8,4 +8,7 @@
     <string name="play">play</string>
     <string name="add">add</string>
     <string name="more">More</string>
+    <string name="followers">%1$s FOLLOWERS</string>
+    <string name="nbAlbum"> %1$s ALBUMS</string>
+    <string name="back_button">back_button</string>
 </resources>

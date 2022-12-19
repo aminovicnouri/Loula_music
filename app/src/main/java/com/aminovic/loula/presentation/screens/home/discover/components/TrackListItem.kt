@@ -1,6 +1,7 @@
 package com.aminovic.loula.presentation.screens.home.discover.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -39,13 +41,16 @@ fun TrackListItem(
     track: TrackDto,
     onClick: (String) -> Unit,
     playPauseTrack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Transparent
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
 
     ConstraintLayout(
-        modifier = modifier.clickable { onClick(track.link!!) }
+        modifier = modifier
+            .clickable { onClick(track.link!!) }
+            .background(backgroundColor)
     ) {
         val (
             divider, trackTitle, trackDuration, image, playIcon,
@@ -100,6 +105,8 @@ fun TrackListItem(
             Text(
                 text = track.titleShort!!,
                 style = MaterialTheme.typography.subtitle2,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.constrainAs(titleShort) {
                     linkTo(
                         start = parent.start,
