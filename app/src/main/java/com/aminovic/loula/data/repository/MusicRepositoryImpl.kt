@@ -6,6 +6,7 @@ import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.data.remote.dto.chart.ChartDto
 import com.aminovic.loula.data.remote.dto.genre.GenreDataDto
 import com.aminovic.loula.data.remote.dto.radio.RadiosDataDto
+import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import com.aminovic.loula.domain.repository.MusicRepository
 import com.aminovic.loula.domain.utils.Resource
 
@@ -33,6 +34,19 @@ class MusicRepositoryImpl(
     override suspend fun getArtist(id: Int): Resource<ArtistDto> {
         return try {
             Resource.Success(data = musicApi.getArtist(id))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
+    }
+
+    override suspend fun getArtistTrack(
+        id: Int,
+        limit: Int,
+        index: Int
+    ): Resource<TrackDataDto> {
+        return try {
+            Resource.Success(data = musicApi.getArtistTracks(id, limit, index))
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Error(message = e.message ?: "Unknown error")

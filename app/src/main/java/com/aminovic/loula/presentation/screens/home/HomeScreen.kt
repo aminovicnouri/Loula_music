@@ -10,11 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aminovic.loula.presentation.screens.home.components.HomeCategoryTab
 import com.aminovic.loula.presentation.screens.home.components.HomeHeader
+import com.aminovic.loula.presentation.screens.home.discover.DiscoverScreen
 import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel(),
+    navigateToPlayer: () -> Unit,
+    navigateToProfile: (Int, String, String, String) -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val state by viewModel.state.collectAsState()
@@ -38,7 +41,6 @@ fun HomeScreen(
             onProfileClicked = {},
             backgroundColor = appBarColor
         )
-
         HomeCategoryTab(
             categories = state.categories,
             selectedCategory = state.selectedCategory,
@@ -46,5 +48,19 @@ fun HomeScreen(
                 viewModel.onEvent(HomeEvent.OnSelectTab(category))
             }
         )
+        when (state.selectedCategory) {
+            HomeCategory.Library -> {
+                // TODO
+            }
+            HomeCategory.Discover -> {
+                DiscoverScreen(
+                    navigateToPlayer = navigateToPlayer,
+                    navigateToProfile = navigateToProfile,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                )
+            }
+        }
     }
 }

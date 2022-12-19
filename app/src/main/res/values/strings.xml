@@ -5,4 +5,7 @@
     <string name="profil_button">profil button</string>
     <string name="discover">Discover</string>
     <string name="your_library">Your library</string>
+    <string name="play">play</string>
+    <string name="add">add</string>
+    <string name="more">More</string>
 </resources>

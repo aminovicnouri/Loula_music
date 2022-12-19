@@ -5,6 +5,7 @@ import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.data.remote.dto.chart.ChartDto
 import com.aminovic.loula.data.remote.dto.genre.GenreDataDto
 import com.aminovic.loula.data.remote.dto.radio.RadiosDataDto
+import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import com.aminovic.loula.domain.utils.Resource
 
 interface MusicRepository {
@@ -13,6 +14,12 @@ interface MusicRepository {
     suspend fun getAlbum(id: Int): Resource<AlbumDto>
 
     suspend fun getArtist(id: Int): Resource<ArtistDto>
+
+    suspend fun getArtistTrack(
+        id: Int,
+        limit: Int = 50,
+        index: Int = 0
+    ): Resource<TrackDataDto>
 
     suspend fun getChart(id: Int): Resource<ChartDto>
 

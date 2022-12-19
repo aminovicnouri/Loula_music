@@ -1,6 +1,5 @@
 package com.aminovic.loula.presentation.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aminovic.loula.domain.repository.MusicRepository
@@ -42,10 +41,6 @@ class HomeScreenViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         result.data?.tracks?.data?.forEach { track ->
-                            Log.d(
-                                "hhhhhhhh",
-                                "${track.title} - ${track.album?.label} - ${track.artist?.name}"
-                            )
                         }
                     }
                     is Resource.Error -> {

@@ -5,8 +5,10 @@ import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.data.remote.dto.chart.ChartDto
 import com.aminovic.loula.data.remote.dto.genre.GenreDataDto
 import com.aminovic.loula.data.remote.dto.radio.RadiosDataDto
+import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface MusicApi {
@@ -18,6 +20,14 @@ interface MusicApi {
 
     @GET("artist/{id}")
     suspend fun getArtist(@Path("id") id: Int): ArtistDto
+
+    @GET("artist/{id}/top")
+    suspend fun getArtistTracks(
+        @Path("id") id: Int,
+        @Query("limit") limit: Int = 50,
+        @Query("index") index: Int = 0
+    ): TrackDataDto
+
 
     @GET("chart/{id}")
     suspend fun getChart(@Path("id") id: Int): ChartDto
