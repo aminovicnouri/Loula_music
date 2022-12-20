@@ -9,6 +9,7 @@ import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 
 interface MusicApi {
@@ -26,6 +27,11 @@ interface MusicApi {
         @Path("id") id: Int,
         @Query("limit") limit: Int = 50,
         @Query("index") index: Int = 0
+    ): TrackDataDto
+
+    @GET
+    suspend fun getArtistTracksPaging(
+        @Url query: String
     ): TrackDataDto
 
 

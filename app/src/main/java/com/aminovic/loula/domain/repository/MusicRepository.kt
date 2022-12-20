@@ -21,6 +21,10 @@ interface MusicRepository {
         index: Int = 0
     ): Resource<TrackDataDto>
 
+    suspend fun getArtistTracksPaging(
+        query: String
+    ): Resource<TrackDataDto>
+
     suspend fun getChart(id: Int): Resource<ChartDto>
 
     suspend fun getRadios(): Resource<RadiosDataDto>

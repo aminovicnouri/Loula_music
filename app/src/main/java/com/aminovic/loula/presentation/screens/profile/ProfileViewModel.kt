@@ -5,6 +5,8 @@ import android.media.MediaPlayer
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aminovic.loula.data.remote.dto.track.TrackDataDto
+import com.aminovic.loula.data.utils.PaginatorImpl
 import com.aminovic.loula.domain.repository.MusicRepository
 import com.aminovic.loula.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +31,8 @@ class ProfileViewModel @Inject constructor(
     val state: StateFlow<ProfileState>
         get() = _state
 
+    private lateinit var paginator: PaginatorImpl<String?, TrackDataDto>
+
 
     private var mediaPlayer: MediaPlayer = MediaPlayer()
     fun getArtist(id: Int) {
@@ -40,7 +44,6 @@ class ProfileViewModel @Inject constructor(
                 when (result) {
                     is Resource.Error -> {
                         _state.value = state.value.copy(
-                            isLoading = false,
                             errorMessage = result.message
                         )
                     }
@@ -48,7 +51,6 @@ class ProfileViewModel @Inject constructor(
                         _state.value = state.value.copy(
                             artist = result.data
                         )
-                        getArtistTracks(id)
                     }
                 }
             }
@@ -73,7 +75,8 @@ class ProfileViewModel @Inject constructor(
                         _state.value = state.value.copy(
                             isLoading = false,
                             errorMessage = null,
-                            tracks = result.data?.data ?: emptyList()
+                            tracks = result.data?.data ?: emptyList(),
+                            nextPage = result.data?.next
                         )
                     }
                 }
@@ -93,6 +96,47 @@ class ProfileViewModel @Inject constructor(
             } catch (e: Exception) {
                 Log.d("hhhhhhhh", "${e.message}")
             }
+        }
+    }
+
+    fun initiatePaginator(query: String) {
+        _state.value = state.value.copy(
+            nextPage = query
+        )
+        paginator = PaginatorImpl<String?, TrackDataDto>(
+            initialKey = query,
+            onLoadUpdated = {
+                _state.value = state.value.copy(
+                    isLoading = it
+                )
+            },
+            onRequest = { nextIndex ->
+                repository.getArtistTracksPaging(query = nextIndex!!)
+            },
+            getNextKey = {
+                _state.value = _state.value.copy(
+                    nextPage = it.next
+                )
+                it.next
+            },
+            onError = {
+                _state.value = _state.value.copy(
+                    errorMessage = it?.message
+                )
+            },
+            onSuccess = { result ->
+                _state.value = _state.value.copy(
+                    tracks = state.value.tracks + result.data,
+                    nextPage = state.value.nextPage,
+                )
+            }
+        )
+        loadNextItems()
+    }
+
+    fun loadNextItems() {
+        viewModelScope.launch {
+            paginator.loadNextItems()
         }
     }
 }

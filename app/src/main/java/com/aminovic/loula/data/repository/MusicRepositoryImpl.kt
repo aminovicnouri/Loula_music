@@ -53,6 +53,15 @@ class MusicRepositoryImpl(
         }
     }
 
+    override suspend fun getArtistTracksPaging(query: String): Resource<TrackDataDto> {
+        return try {
+            Resource.Success(data = musicApi.getArtistTracksPaging(query))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(message = e.message ?: "Unknown error")
+        }
+    }
+
     override suspend fun getChart(id: Int): Resource<ChartDto> {
         return try {
             Resource.Success(data = musicApi.getChart(id = id))

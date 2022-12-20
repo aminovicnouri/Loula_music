@@ -7,5 +7,6 @@ data class ProfileState(
     val artist: ArtistDto? = null,
     val tracks: List<TrackDto> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val nextPage: String? = null
 )
