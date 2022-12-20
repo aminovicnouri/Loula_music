@@ -23,11 +23,11 @@ fun ProfileScreen(
     artistImageUrl: String,
     artistName: String,
     artistTrackList: String,
-    navigateToPlayer: () -> Unit,
+    navigateToPlayer: (String, String, Int, String, String) -> Unit,
     onBackPress: () -> Unit
 ) {
 
-    val state = viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsState()
     val systemUiController = rememberSystemUiController()
     val statusBarColor = MaterialTheme.colors.surface.copy(alpha = 0.5f)
     val spacing = LocalSpacing.current
@@ -75,22 +75,32 @@ fun ProfileScreen(
                     visibility = visibility,
                     firstItemTranslationY = firstItemTranslationY,
                     artistImageUrl = artistImageUrl,
-                    nbFan = state.value.artist?.nbFan,
+                    nbFan = state.artist?.nbFan,
                     artistName = artistName,
-                    nbAlbum = state.value.artist?.nbAlbum,
+                    nbAlbum = state.artist?.nbAlbum,
                     onBackPress = onBackPress
                 )
             }
 
-            itemsIndexed(state.value.tracks) { idx, track ->
+            itemsIndexed(state.tracks) { idx, track ->
                 TrackListItem(
                     modifier = Modifier.fillMaxWidth(),
                     track = track,
-                    onClick = {},
-                    playPauseTrack = { /*TODO*/ },
+                    onClick = {
+                        navigateToPlayer(
+                            track.title ?: "Unknown",
+                            track.artist?.name ?: "Unknown",
+                            track.duration?.toInt() ?: 0,
+                            track.album!!.coverBig!!,
+                            track.preview!!
+                        )
+                    },
+                    playPauseTrack = {
+                        viewModel.playSound(track.preview!!)
+                    },
                     backgroundColor = MaterialTheme.colors.surface
                 )
-                if (idx < state.value.tracks.size - 1) {
+                if (idx < state.tracks.size - 1) {
                     Divider(color = Color.LightGray)
                 }
             }

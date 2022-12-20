@@ -1,10 +1,14 @@
 package com.aminovic.loula.presentation.screens.profile
 
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aminovic.loula.domain.repository.MusicRepository
 import com.aminovic.loula.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -26,6 +30,7 @@ class ProfileViewModel @Inject constructor(
         get() = _state
 
 
+    private var mediaPlayer: MediaPlayer = MediaPlayer()
     fun getArtist(id: Int) {
         viewModelScope.launch {
             _state.value = state.value.copy(
@@ -72,6 +77,21 @@ class ProfileViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    fun playSound(url: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            mediaPlayer.stop()
+            mediaPlayer = MediaPlayer()
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            try {
+                mediaPlayer.setDataSource(url)
+                mediaPlayer.prepare()
+                mediaPlayer.start()
+            } catch (e: Exception) {
+                Log.d("hhhhhhhh", "${e.message}")
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.compose.material.Tab
 import androidx.compose.material.TabPosition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 
@@ -15,7 +16,8 @@ fun ArtistTabs(
     artists: List<ArtistDto>,
     selectedArtist: ArtistDto?,
     onArtistSelected: (ArtistDto) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    visibility: Float
 ) {
     val selectedIndex = artists.indexOfFirst { it.id == selectedArtist?.id }
     val spacing = LocalSpacing.current
@@ -26,6 +28,7 @@ fun ArtistTabs(
         edgePadding = spacing.spaceMediumLarge,
         indicator = emptyTabIndicator,
         modifier = modifier
+            .alpha(1f - visibility)
     ) {
         artists.forEachIndexed { index, artist ->
             Tab(

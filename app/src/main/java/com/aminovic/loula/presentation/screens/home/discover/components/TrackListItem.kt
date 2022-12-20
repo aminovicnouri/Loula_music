@@ -40,7 +40,7 @@ import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 fun TrackListItem(
     track: TrackDto,
     onClick: (String) -> Unit,
-    playPauseTrack: () -> Unit,
+    playPauseTrack: (String) -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.Transparent
 ) {
@@ -131,7 +131,7 @@ fun TrackListItem(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 24.dp)
-                ) {}
+                ) { playPauseTrack(track.preview!!) }
                 .size(48.dp)
                 .padding(spacing.spaceSmall)
                 .semantics { role = Role.Button }

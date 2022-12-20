@@ -1,5 +1,6 @@
 package com.aminovic.loula.presentation.screens.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -13,10 +14,11 @@ import com.aminovic.loula.presentation.screens.home.components.HomeHeader
 import com.aminovic.loula.presentation.screens.home.discover.DiscoverScreen
 import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 
+@ExperimentalFoundationApi
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    navigateToPlayer: () -> Unit,
+    navigateToPlayer: (String, String, Int, String, String) -> Unit,
     navigateToProfile: (Int, String, String, String) -> Unit,
 ) {
     val spacing = LocalSpacing.current
