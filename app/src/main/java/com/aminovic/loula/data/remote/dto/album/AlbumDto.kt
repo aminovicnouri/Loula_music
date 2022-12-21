@@ -1,14 +1,14 @@
 package com.aminovic.loula.data.remote.dto.album
 
-import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.data.remote.dto.ContributorDto
+import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.data.remote.dto.genre.GenreDataDto
 import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import com.squareup.moshi.Json
 
 data class AlbumDto(
     @field:Json(name = "id")
-    var id: String? = null,
+    var id: Int? = null,
     @field:Json(name = "title")
     var title: String? = null,
     @field:Json(name = "upc")

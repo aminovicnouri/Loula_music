@@ -95,7 +95,7 @@ fun ProfileScreen(
                         navigateToPlayer(
                             track.title ?: "Unknown",
                             track.artist?.name ?: "Unknown",
-                            track.duration?.toInt() ?: 0,
+                            track.duration ?: 0,
                             track.album!!.coverBig!!,
                             track.preview!!
                         )

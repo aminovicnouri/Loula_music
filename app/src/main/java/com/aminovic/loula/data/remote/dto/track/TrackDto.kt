@@ -1,12 +1,12 @@
 package com.aminovic.loula.data.remote.dto.track
 
-import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.aminovic.loula.data.remote.dto.ContributorDto
 import com.aminovic.loula.data.remote.dto.album.AlbumDto
+import com.aminovic.loula.data.remote.dto.artist.ArtistDto
 import com.squareup.moshi.Json
 
 data class TrackDto(
-    @field:Json(name = "id") var id: String? = null,
+    @field:Json(name = "id") var id: Int? = null,
     @field:Json(name = "readable") var readable: Boolean? = null,
     @field:Json(name = "title") var title: String? = null,
     @field:Json(name = "title_short") var titleShort: String? = null,
@@ -14,7 +14,7 @@ data class TrackDto(
     @field:Json(name = "isrc") var isrc: String? = null,
     @field:Json(name = "link") var link: String? = null,
     @field:Json(name = "share") var share: String? = null,
-    @field:Json(name = "duration") var duration: String? = null,
+    @field:Json(name = "duration") var duration: Int? = null,
     @field:Json(name = "track_position") var trackPosition: Int? = null,
     @field:Json(name = "disk_number") var diskNumber: Int? = null,
     @field:Json(name = "rank") var rank: String? = null,

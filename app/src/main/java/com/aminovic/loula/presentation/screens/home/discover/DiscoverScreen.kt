@@ -90,7 +90,7 @@ fun DiscoverScreen(
                         selectedArtist = state.selectedArtist,
                         onArtistSelected = { artist ->
                             navigateToProfile(
-                                artist.id!!.toInt(),
+                                artist.id!!,
                                 artist.pictureMedium!!,
                                 artist.name!!,
                                 artist.tracklist!!
@@ -125,7 +125,7 @@ fun DiscoverScreen(
                             navigateToPlayer(
                                 item.title ?: "Unknown",
                                 item.artist?.name ?: "Unknown",
-                                item.duration?.toInt() ?: 0,
+                                item.duration ?: 0,
                                 item.album!!.coverBig!!,
                                 item.preview!!
                             )

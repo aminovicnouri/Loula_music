@@ -143,7 +143,7 @@ fun TrackListItem(
         )
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = "${track.duration!!.toInt() / 60}:${track.duration!!.toInt() % 60}",
+                text = "${track.duration!! / 60}:${track.duration!! % 60}",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.caption,

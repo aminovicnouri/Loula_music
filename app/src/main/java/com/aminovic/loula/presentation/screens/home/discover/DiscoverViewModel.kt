@@ -40,7 +40,7 @@ class DiscoverViewModel @Inject constructor(
                             errorMessage = null
                         )
                         state.value.selectedAlbum?.let { album ->
-                            refreshAlbumTracks(album.id!!.toInt())
+                            refreshAlbumTracks(album.id!!)
                         }
                     }
                     is Resource.Error -> {
@@ -63,7 +63,7 @@ class DiscoverViewModel @Inject constructor(
                 )
             }
             is DiscoverEvents.OnSelectAlbum -> {
-                refreshAlbumTracks(event.album.id!!.toInt())
+                refreshAlbumTracks(event.album.id!!)
             }
             is DiscoverEvents.OnSelectArtist -> {
                 _state.value = state.value.copy(

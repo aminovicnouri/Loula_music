@@ -3,7 +3,7 @@ package com.aminovic.loula.data.remote.dto.artist
 import com.squareup.moshi.Json
 
 data class ArtistDto(
-    @field:Json(name = "id") var id: String? = null,
+    @field:Json(name = "id") var id: Int? = null,
     @field:Json(name = "name") var name: String? = null,
     @field:Json(name = "link") var link: String? = null,
     @field:Json(name = "share") var share: String? = null,
