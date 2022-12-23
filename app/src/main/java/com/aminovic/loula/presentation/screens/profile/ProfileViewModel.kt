@@ -1,16 +1,15 @@
 package com.aminovic.loula.presentation.screens.profile
 
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aminovic.loula.data.mappers.asSong
 import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import com.aminovic.loula.data.utils.PaginatorImpl
 import com.aminovic.loula.domain.repository.MusicRepository
+import com.aminovic.loula.domain.utils.MediaConstants
 import com.aminovic.loula.domain.utils.Resource
+import com.aminovic.loula.exo_player.MusicServiceConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: MusicRepository
+    private val repository: MusicRepository,
+    private val musicServiceConnection: MusicServiceConnection,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileState())
@@ -34,7 +34,15 @@ class ProfileViewModel @Inject constructor(
     private lateinit var paginator: PaginatorImpl<String?, TrackDataDto>
 
 
-    private var mediaPlayer: MediaPlayer = MediaPlayer()
+    fun play(startIndex: Int = MediaConstants.DEFAULT_INDEX) =
+        musicServiceConnection.playSongs(
+            songs = _state.value.tracks.map { it.asSong() },
+            startIndex = startIndex
+        )
+
+    fun shuffle() =
+        musicServiceConnection.shuffleSongs(songs = _state.value.tracks.map { it.asSong() })
+
     fun getArtist(id: Int) {
         viewModelScope.launch {
             _state.value = state.value.copy(
@@ -84,19 +92,11 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun playSound(url: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            mediaPlayer.stop()
-            mediaPlayer = MediaPlayer()
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-            try {
-                mediaPlayer.setDataSource(url)
-                mediaPlayer.prepare()
-                mediaPlayer.start()
-            } catch (e: Exception) {
-                Log.d("hhhhhhhh", "${e.message}")
-            }
-        }
+    fun playSound(index: Int) {
+        musicServiceConnection.playSongs(
+            songs = _state.value.tracks.map { it.asSong() },
+            startIndex = index
+        )
     }
 
     fun initiatePaginator(query: String) {

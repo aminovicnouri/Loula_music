@@ -101,7 +101,7 @@ fun ProfileScreen(
                         )
                     },
                     playPauseTrack = {
-                        viewModel.playSound(track.preview!!)
+                        viewModel.playSound(idx)
                     },
                     backgroundColor = MaterialTheme.colors.surface
                 )

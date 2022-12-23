@@ -59,7 +59,7 @@ fun HomeHeader(
                 ) {
                     Icon(
                         imageVector = Icons.Default.AccountCircle,
-                        contentDescription = stringResource(id = R.string.profil_button)
+                        contentDescription = stringResource(id = R.string.profile_button)
                     )
                 }
             }
