@@ -2,7 +2,7 @@
     <string name="app_name">LOULA</string>
     <string name="home_logo">home logo</string>
     <string name="search_button">search button</string>
-    <string name="profil_button">profil button</string>
+    <string name="profile_button">profile button</string>
     <string name="discover">Discover</string>
     <string name="your_library">Your library</string>
     <string name="play">play</string>
@@ -15,4 +15,13 @@
     <string name="replay10">replay10</string>
     <string name="forward10">forward10</string>
     <string name="next">Next</string>
+    <string name="repeat">Repeat</string>
+    <string name="repeat_one">Repeat one</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="skip_previous">Skip to previous</string>
+    <string name="pause">Pause</string>
+    <string name="skip_next">Skip to next</string>
+    <string name="music_notification_channel_name">Loula Muzika</string>
+    <string name="player_timestamp_format" translatable="false">%1$s:%2$s</string>
+
 </resources>

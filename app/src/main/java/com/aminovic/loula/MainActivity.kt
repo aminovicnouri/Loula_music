@@ -7,10 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.aminovic.loula.presentation.screens.Screens
@@ -22,8 +24,12 @@ import com.aminovic.loula.presentation.utils.DevicePosture
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalPagerApi
+@ExperimentalMaterialApi
+@ExperimentalLifecycleComposeApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @AndroidEntryPoint
@@ -53,15 +59,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(route = Screens.Home.route) {
                             HomeScreen(
-                                navigateToPlayer = { trackTitle, artist, duration, imageUrl, trackUrl ->
+                                navigateToPlayer = {
                                     navController.navigate(
-                                        Screens.Player.createRoute(
-                                            trackTitle,
-                                            artist,
-                                            duration,
-                                            imageUrl,
-                                            trackUrl
-                                        )
+                                        Screens.Player.route
                                     )
                                 },
                                 navigateToProfile = { id, imageUrl, name, tracksList ->
@@ -102,51 +102,18 @@ class MainActivity : ComponentActivity() {
                                 artistImageUrl = artistImageUrl,
                                 artistName = artistName,
                                 artistTrackList = artistTrackList,
-                                navigateToPlayer = { trackTitle, artist, duration, imageUrl, trackUrl ->
+                                navigateToPlayer = {
                                     navController.navigate(
-                                        Screens.Player.createRoute(
-                                            trackTitle,
-                                            artist,
-                                            duration,
-                                            imageUrl,
-                                            trackUrl
-                                        )
+                                        Screens.Player.route
                                     )
                                 },
                                 onBackPress = { navController.popBackStack() }
                             )
                         }
                         composable(
-                            route = Screens.Player.route,
-                            arguments = listOf(
-                                navArgument("trackTitle") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("artist") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("duration") {
-                                    type = NavType.IntType
-                                },
-                                navArgument("imageUrl") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("trackUrl") {
-                                    type = NavType.StringType
-                                },
-                            )
+                            route = Screens.Player.route
                         ) {
-                            val trackTitle = it.arguments?.getString("trackTitle")!!
-                            val artist = it.arguments?.getString("artist")!!
-                            val duration = it.arguments?.getInt("duration")!!
-                            val imageUrl = it.arguments?.getString("imageUrl")!!
-                            val trackUrl = it.arguments?.getString("trackUrl")!!
                             PlayerScreen(
-                                trackTitle = trackTitle,
-                                artist = artist,
-                                duration = duration,
-                                imageUrl = imageUrl,
-                                trackUrl = trackUrl,
                                 onBackPressed = { navController.popBackStack() },
                                 addToPlayList = { /*TODO*/ },
                                 more = { /*TODO*/ })

@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 val Yellow800 = Color(0xFFF29F05)
 val Red300 = Color(0xFFEA6D7E)
 
+const val MinContrastOfPrimaryVsSurface = 3f
 
 val LolaMusicColors = darkColors(
     primary = Yellow800,

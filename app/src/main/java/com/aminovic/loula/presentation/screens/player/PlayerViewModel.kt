@@ -1,10 +1,16 @@
 package com.aminovic.loula.presentation.screens.player
 
+import android.graphics.Bitmap
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import com.aminovic.loula.domain.repository.MusicRepository
+import androidx.lifecycle.viewModelScope
+import androidx.palette.graphics.Palette
+import com.aminovic.loula.domain.utils.MediaConstants.DEFAULT_POSITION_MS
+import com.aminovic.loula.domain.utils.convertToPosition
+import com.aminovic.loula.exo_player.MusicServiceConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 
@@ -14,12 +20,37 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayerViewModel @Inject constructor(
-    private val repository: MusicRepository
+    private val musicServiceConnection: MusicServiceConnection,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(PlayerState())
+    val musicState = musicServiceConnection.musicState
+    val currentPosition = musicServiceConnection.currentPosition.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Lazily,
+        initialValue = DEFAULT_POSITION_MS
+    )
 
-    val state: StateFlow<PlayerState>
-        get() = _state
+    fun onEvent(event: PlayerEvent) {
+        when (event) {
+            is PlayerEvent.Play -> play()
+            PlayerEvent.Pause -> pause()
+            PlayerEvent.SkipNext -> skipNext()
+            PlayerEvent.SkipPrevious -> skipPrevious()
+        }
+    }
 
+    fun skipPrevious() = musicServiceConnection.skipPrevious()
+    fun play() = musicServiceConnection.play()
+    fun pause() = musicServiceConnection.pause()
+    fun skipNext() = musicServiceConnection.skipNext()
+    fun skipTo(position: Float) =
+        musicServiceConnection.skipTo(convertToPosition(position, musicState.value.duration))
+
+    fun calculateColorPalette(drawable: Bitmap, onFinish: (Color) -> Unit) {
+        Palette.from(drawable).generate { palette ->
+            palette?.dominantSwatch?.rgb?.let { colorValue ->
+                onFinish(Color(colorValue))
+            }
+        }
+    }
 }

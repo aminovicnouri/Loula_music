@@ -1,6 +1,5 @@
-package com.aminovic.loula.presentation.screens.home.discover.components
+package com.aminovic.loula.presentation.components.music_item
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -10,17 +9,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlaylistAdd
-import androidx.compose.material.icons.rounded.PlayCircleFilled
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
@@ -29,27 +25,42 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.aminovic.loula.R
 import com.aminovic.loula.data.remote.dto.track.TrackDto
+import com.aminovic.loula.domain.utils.AppIcons
+import com.aminovic.loula.domain.utils.asFormattedString
 import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 
 
 @Composable
 fun TrackListItem(
-    track: TrackDto,
-    onClick: (String) -> Unit,
-    playPauseTrack: (String) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: SongItemViewModel = hiltViewModel(),
+    track: TrackDto,
+    onClick: () -> Unit,
+    playPauseTrack: (Boolean, String) -> Unit,
     backgroundColor: Color = Color.Transparent
 ) {
     val spacing = LocalSpacing.current
     val context = LocalContext.current
 
+    val musicState by viewModel.musicState.collectAsState()
+    val currentPosition by viewModel.currentPosition.collectAsState()
+    val state by viewModel.state.collectAsState()
+    val isRunning = musicState.currentSong.id == track.id
+    musicState.playbackState.name
+
+    val textColor = if (isRunning)
+        MaterialTheme.colors.primary
+    else
+        MaterialTheme.colors.onSurface
+
     ConstraintLayout(
         modifier = modifier
-            .clickable { onClick(track.link!!) }
+            .clickable { onClick() }
             .background(backgroundColor)
     ) {
         val (
@@ -85,6 +96,7 @@ fun TrackListItem(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.subtitle1,
+            color = textColor,
             modifier = Modifier.constrainAs(trackTitle) {
                 linkTo(
                     start = parent.start,
@@ -105,6 +117,7 @@ fun TrackListItem(
             Text(
                 text = track.titleShort!!,
                 style = MaterialTheme.typography.subtitle2,
+                color = textColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.constrainAs(titleShort) {
@@ -121,17 +134,22 @@ fun TrackListItem(
                 }
             )
         }
-
-        Image(
-            imageVector = Icons.Rounded.PlayCircleFilled,
+        Icon(
+            painter = painterResource(
+                id = if (isRunning)
+                    AppIcons.Pause.resourceId
+                else
+                    AppIcons.Play.resourceId
+            ),
             contentDescription = stringResource(id = R.string.play),
-            contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(LocalContentColor.current),
+            tint = if (isRunning) textColor else LocalContentColor.current,
             modifier = Modifier
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 24.dp)
-                ) { playPauseTrack(track.preview!!) }
+                ) {
+                    playPauseTrack(isRunning, track.preview!!)
+                }
                 .size(48.dp)
                 .padding(spacing.spaceSmall)
                 .semantics { role = Role.Button }
@@ -143,7 +161,11 @@ fun TrackListItem(
         )
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = "${track.duration!! / 60}:${track.duration!! % 60}",
+                text = if (isRunning)
+                    currentPosition.asFormattedString()
+                else
+                    track.duration!!.asFormattedString(),
+                color = textColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.caption,
