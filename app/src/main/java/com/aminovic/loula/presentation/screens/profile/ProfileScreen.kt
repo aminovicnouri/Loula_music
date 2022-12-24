@@ -1,5 +1,6 @@
 package com.aminovic.loula.presentation.screens.profile
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.aminovic.loula.presentation.screens.home.discover.components.TrackListItem
+import com.aminovic.loula.presentation.components.music_item.TrackListItem
 import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -24,7 +25,7 @@ fun ProfileScreen(
     artistImageUrl: String,
     artistName: String,
     artistTrackList: String,
-    navigateToPlayer: (String, String, Int, String, String) -> Unit,
+    navigateToPlayer: () -> Unit,
     onBackPress: () -> Unit
 ) {
 
@@ -64,8 +65,8 @@ fun ProfileScreen(
         )
     }
     LaunchedEffect(key1 = true) {
-        viewModel.getArtist(artistId)
-        viewModel.initiatePaginator(artistTrackList)
+        viewModel.onEvent(ProfileEvent.GetArtist(artistId = artistId))
+        viewModel.onEvent(ProfileEvent.InitiatePaginator(query = artistTrackList))
     }
     Box {
         LazyColumn(
@@ -92,16 +93,11 @@ fun ProfileScreen(
                     modifier = Modifier.fillMaxWidth(),
                     track = track,
                     onClick = {
-                        navigateToPlayer(
-                            track.title ?: "Unknown",
-                            track.artist?.name ?: "Unknown",
-                            track.duration ?: 0,
-                            track.album!!.coverBig!!,
-                            track.preview!!
-                        )
+                        navigateToPlayer()
                     },
-                    playPauseTrack = {
-                        viewModel.playSound(idx)
+                    playPauseTrack = { isRunning, trackUrl ->
+                        Log.d("hhhhhhhh", "$isRunning")
+                        viewModel.onEvent(ProfileEvent.PlaySound(isRunning = isRunning, idx = idx))
                     },
                     backgroundColor = MaterialTheme.colors.surface
                 )
@@ -109,7 +105,7 @@ fun ProfileScreen(
                     Divider(color = Color.LightGray)
                 } else {
                     if (state.nextPage != null && !state.isLoading) {
-                        viewModel.loadNextItems()
+                        viewModel.onEvent(ProfileEvent.LoadNextItems)
                     }
                 }
             }

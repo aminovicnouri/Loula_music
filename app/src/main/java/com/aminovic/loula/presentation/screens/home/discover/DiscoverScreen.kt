@@ -13,9 +13,9 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.aminovic.loula.data.remote.dto.track.TrackDto
+import com.aminovic.loula.presentation.components.music_item.TrackListItem
 import com.aminovic.loula.presentation.screens.home.discover.components.AlbumTabs
 import com.aminovic.loula.presentation.screens.home.discover.components.ArtistTabs
-import com.aminovic.loula.presentation.screens.home.discover.components.TrackListItem
 import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 
 
@@ -24,7 +24,7 @@ import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 fun DiscoverScreen(
     modifier: Modifier = Modifier,
     viewModel: DiscoverViewModel = hiltViewModel(),
-    navigateToPlayer: (String, String, Int, String, String) -> Unit,
+    navigateToPlayer: () -> Unit,
     navigateToProfile: (Int, String, String, String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
@@ -121,16 +121,9 @@ fun DiscoverScreen(
                 items(tracks) { item: TrackDto ->
                     TrackListItem(
                         track = item,
-                        onClick = {
-                            navigateToPlayer(
-                                item.title ?: "Unknown",
-                                item.artist?.name ?: "Unknown",
-                                item.duration ?: 0,
-                                item.album!!.coverBig!!,
-                                item.preview!!
-                            )
+                        onClick = navigateToPlayer,
+                        playPauseTrack = { isRunning, trackUrl ->
                         },
-                        playPauseTrack = { },
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colors.surface
                     )

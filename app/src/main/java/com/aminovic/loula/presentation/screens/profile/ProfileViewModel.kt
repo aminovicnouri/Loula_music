@@ -33,6 +33,16 @@ class ProfileViewModel @Inject constructor(
 
     private lateinit var paginator: PaginatorImpl<String?, TrackDataDto>
 
+    fun onEvent(event: ProfileEvent) {
+        when (event) {
+            is ProfileEvent.GetArtist -> getArtist(event.artistId)
+            is ProfileEvent.InitiatePaginator -> initiatePaginator(event.query)
+            ProfileEvent.LoadNextItems -> loadNextItems()
+            is ProfileEvent.PlaySound -> {
+                if (event.isRunning) musicServiceConnection.pause() else playSound(event.idx)
+            }
+        }
+    }
 
     fun play(startIndex: Int = MediaConstants.DEFAULT_INDEX) =
         musicServiceConnection.playSongs(
@@ -43,7 +53,7 @@ class ProfileViewModel @Inject constructor(
     fun shuffle() =
         musicServiceConnection.shuffleSongs(songs = _state.value.tracks.map { it.asSong() })
 
-    fun getArtist(id: Int) {
+    private fun getArtist(id: Int) {
         viewModelScope.launch {
             _state.value = state.value.copy(
                 isLoading = true
@@ -92,14 +102,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun playSound(index: Int) {
+    private fun playSound(index: Int) {
         musicServiceConnection.playSongs(
             songs = _state.value.tracks.map { it.asSong() },
             startIndex = index
         )
     }
 
-    fun initiatePaginator(query: String) {
+    private fun initiatePaginator(query: String) {
         _state.value = state.value.copy(
             nextPage = query
         )
@@ -134,7 +144,7 @@ class ProfileViewModel @Inject constructor(
         loadNextItems()
     }
 
-    fun loadNextItems() {
+    private fun loadNextItems() {
         viewModelScope.launch {
             paginator.loadNextItems()
         }

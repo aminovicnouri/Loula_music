@@ -69,6 +69,9 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4'
 
+    //collectAsStateWithLifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha03"
+
     // Compose Navigation
     implementation "androidx.navigation:navigation-compose:2.6.0-alpha04"
     implementation "com.google.accompanist:accompanist-navigation-animation:0.28.0"
@@ -108,6 +111,10 @@ dependencies {
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation "com.google.accompanist:accompanist-coil:$accompanistCoilVersion"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanistCoilVersion"
+    implementation 'com.google.accompanist:accompanist-pager:0.28.0'
+
 
     implementation 'com.google.android.gms:play-services-auth:20.4.0'
 

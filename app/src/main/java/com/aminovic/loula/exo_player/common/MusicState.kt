@@ -9,7 +9,7 @@ import com.aminovic.loula.domain.utils.MediaConstants.DEFAULT_MEDIA_ID
 
 data class MusicState(
     val currentSong: Song = Song(
-        mediaId = DEFAULT_MEDIA_ID,
+        id = DEFAULT_MEDIA_ID,
         artistId = DEFAULT_ARTIST_ID,
         albumId = DEFAULT_ALBUM_ID,
         mediaUri = Uri.EMPTY,

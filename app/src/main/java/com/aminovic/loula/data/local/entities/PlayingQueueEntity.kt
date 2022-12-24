@@ -7,12 +7,9 @@ import com.aminovic.loula.domain.utils.Constants
 
 @Entity(tableName = Constants.Tables.PLAYING_QUEUE)
 data class PlayingQueueEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = Constants.Fields.ID)
-    val id: Int = 0,
-
-    @ColumnInfo(name = Constants.Fields.MEDIA_ID)
-    val mediaId: String,
+    val id: Int,
 
     @ColumnInfo(name = Constants.Fields.ARTIST_ID)
     val artistId: Long,

@@ -18,7 +18,7 @@ import com.aminovic.loula.presentation.ui.theme.LocalSpacing
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    navigateToPlayer: (String, String, Int, String, String) -> Unit,
+    navigateToPlayer: () -> Unit,
     navigateToProfile: (Int, String, String, String) -> Unit,
 ) {
     val spacing = LocalSpacing.current

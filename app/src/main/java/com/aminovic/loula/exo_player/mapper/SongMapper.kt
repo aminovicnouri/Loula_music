@@ -13,7 +13,7 @@ import com.aminovic.loula.exo_player.util.ARTIST_ID
 import com.aminovic.loula.exo_player.util.buildPlayableMediaItem
 
 internal fun SongModel.asMediaItem() = buildPlayableMediaItem(
-    mediaId = mediaId,
+    mediaId = id.toString(),
     artistId = artistId,
     albumId = albumId,
     mediaUri = mediaUri.toUri(),
@@ -23,7 +23,7 @@ internal fun SongModel.asMediaItem() = buildPlayableMediaItem(
 )
 
 internal fun Song.asMediaItem() = buildPlayableMediaItem(
-    mediaId = mediaId,
+    mediaId = id.toString(),
     artistId = artistId,
     albumId = albumId,
     mediaUri = mediaUri,
@@ -33,7 +33,7 @@ internal fun Song.asMediaItem() = buildPlayableMediaItem(
 )
 
 internal fun Song.asSongModel() = SongModel(
-    mediaId = mediaId,
+    id = id,
     artistId = artistId,
     albumId = albumId,
     mediaUri = mediaUri.toString(),
@@ -44,7 +44,7 @@ internal fun Song.asSongModel() = SongModel(
 )
 
 internal fun MediaItem?.asSong() = Song(
-    mediaId = this?.mediaId ?: DEFAULT_MEDIA_ID,
+    id = this?.mediaId?.toInt() ?: DEFAULT_MEDIA_ID,
     artistId = this?.mediaMetadata?.extras?.getLong(ARTIST_ID) ?: DEFAULT_ARTIST_ID,
     albumId = this?.mediaMetadata?.extras?.getLong(ALBUM_ID) ?: DEFAULT_ALBUM_ID,
     mediaUri = this?.requestMetadata?.mediaUri.orEmpty(),
@@ -56,7 +56,7 @@ internal fun MediaItem?.asSong() = Song(
 
 
 fun SongModel.asSong() = Song(
-    mediaId = mediaId,
+    id = id,
     artistId = artistId,
     albumId = albumId,
     mediaUri = mediaUri.toUri(),

@@ -3,7 +3,7 @@ package com.aminovic.loula.domain.data
 import android.net.Uri
 
 data class Song(
-    val mediaId: String,
+    val id: Int,
     val artistId: Long,
     val albumId: Long,
     val mediaUri: Uri,

@@ -6,7 +6,7 @@ import com.aminovic.loula.domain.data.Song
 import com.aminovic.loula.domain.utils.MediaConstants
 
 fun TrackDto.asSong() = Song(
-    mediaId = this.id.toString() ?: MediaConstants.DEFAULT_MEDIA_ID,
+    id = this.id ?: MediaConstants.DEFAULT_MEDIA_ID,
     artistId = this.artist?.id?.toLong() ?: MediaConstants.DEFAULT_ARTIST_ID,
     albumId = this.album?.id?.toLong() ?: MediaConstants.DEFAULT_ALBUM_ID,
     mediaUri = this.preview!!.toUri(),

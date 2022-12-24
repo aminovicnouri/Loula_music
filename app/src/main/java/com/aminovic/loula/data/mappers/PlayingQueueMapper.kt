@@ -4,7 +4,7 @@ import com.aminovic.loula.data.local.entities.PlayingQueueEntity
 import com.aminovic.loula.data.modal.SongModel
 
 internal fun SongModel.asPlayingQueueEntity() = PlayingQueueEntity(
-    mediaId = mediaId,
+    id = id,
     artistId = artistId,
     albumId = albumId,
     mediaUri = mediaUri,
@@ -15,7 +15,7 @@ internal fun SongModel.asPlayingQueueEntity() = PlayingQueueEntity(
 )
 
 internal fun PlayingQueueEntity.asSongModel() = SongModel(
-    mediaId = mediaId,
+    id = id,
     artistId = artistId,
     albumId = albumId,
     mediaUri = mediaUri,

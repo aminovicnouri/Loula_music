@@ -1,7 +1,7 @@
 package com.aminovic.loula.data.modal
 
 data class SongModel(
-    val mediaId: String,
+    val id: Int,
     val artistId: Long,
     val albumId: Long,
     val mediaUri: String,
