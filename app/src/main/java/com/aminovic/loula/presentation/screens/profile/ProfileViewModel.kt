@@ -39,7 +39,15 @@ class ProfileViewModel @Inject constructor(
             is ProfileEvent.InitiatePaginator -> initiatePaginator(event.query)
             ProfileEvent.LoadNextItems -> loadNextItems()
             is ProfileEvent.PlaySound -> {
-                if (event.isRunning) musicServiceConnection.pause() else playSound(event.idx)
+                if (event.isRunning) {
+                    if (!event.playWhenReady) {
+                        musicServiceConnection.play()
+                    } else {
+                        musicServiceConnection.pause()
+                    }
+                } else {
+                    playSound(event.idx)
+                }
             }
         }
     }

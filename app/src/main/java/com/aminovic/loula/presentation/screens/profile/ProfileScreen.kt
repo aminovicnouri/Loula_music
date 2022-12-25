@@ -1,6 +1,5 @@
 package com.aminovic.loula.presentation.screens.profile
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -92,12 +91,25 @@ fun ProfileScreen(
                 TrackListItem(
                     modifier = Modifier.fillMaxWidth(),
                     track = track,
-                    onClick = {
+                    onClick = { isRunning ->
+                        if (!isRunning)
+                            viewModel.onEvent(
+                                ProfileEvent.PlaySound(
+                                    isRunning = false,
+                                    playWhenReady = false,
+                                    idx = idx
+                                )
+                            )
                         navigateToPlayer()
                     },
-                    playPauseTrack = { isRunning, trackUrl ->
-                        Log.d("hhhhhhhh", "$isRunning")
-                        viewModel.onEvent(ProfileEvent.PlaySound(isRunning = isRunning, idx = idx))
+                    playPauseTrack = { isRunning, playWhenReady, trackUrl ->
+                        viewModel.onEvent(
+                            ProfileEvent.PlaySound(
+                                isRunning = isRunning,
+                                playWhenReady = playWhenReady,
+                                idx = idx
+                            )
+                        )
                     },
                     backgroundColor = MaterialTheme.colors.surface
                 )

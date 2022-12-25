@@ -40,8 +40,8 @@ fun TrackListItem(
     modifier: Modifier = Modifier,
     viewModel: SongItemViewModel = hiltViewModel(),
     track: TrackDto,
-    onClick: () -> Unit,
-    playPauseTrack: (Boolean, String) -> Unit,
+    onClick: (Boolean) -> Unit,
+    playPauseTrack: (Boolean, Boolean, String) -> Unit,
     backgroundColor: Color = Color.Transparent
 ) {
     val spacing = LocalSpacing.current
@@ -49,7 +49,6 @@ fun TrackListItem(
 
     val musicState by viewModel.musicState.collectAsState()
     val currentPosition by viewModel.currentPosition.collectAsState()
-    val state by viewModel.state.collectAsState()
     val isRunning = musicState.currentSong.id == track.id
     musicState.playbackState.name
 
@@ -60,7 +59,7 @@ fun TrackListItem(
 
     ConstraintLayout(
         modifier = modifier
-            .clickable { onClick() }
+            .clickable { onClick(isRunning) }
             .background(backgroundColor)
     ) {
         val (
@@ -136,7 +135,7 @@ fun TrackListItem(
         }
         Icon(
             painter = painterResource(
-                id = if (isRunning)
+                id = if (isRunning && musicState.playWhenReady)
                     AppIcons.Pause.resourceId
                 else
                     AppIcons.Play.resourceId
@@ -148,9 +147,9 @@ fun TrackListItem(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 24.dp)
                 ) {
-                    playPauseTrack(isRunning, track.preview!!)
+                    playPauseTrack(isRunning, musicState.playWhenReady, track.preview!!)
                 }
-                .size(48.dp)
+                .size(32.dp)
                 .padding(spacing.spaceSmall)
                 .semantics { role = Role.Button }
                 .constrainAs(playIcon) {

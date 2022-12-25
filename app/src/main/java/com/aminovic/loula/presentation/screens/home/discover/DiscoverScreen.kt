@@ -121,8 +121,8 @@ fun DiscoverScreen(
                 items(tracks) { item: TrackDto ->
                     TrackListItem(
                         track = item,
-                        onClick = navigateToPlayer,
-                        playPauseTrack = { isRunning, trackUrl ->
+                        onClick = { navigateToPlayer() },
+                        playPauseTrack = { isRunning, playWhenReady, trackUrl ->
                         },
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colors.surface
