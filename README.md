@@ -6,10 +6,11 @@ Loula Music is a sample Media Player app, built with [Jetpack Compose][compose],
 
 ## Screenshots
 
-<img src="screenshots/loula-app.gif"/>
+<img src="screenshot/loula-app.gif"/>
 
 
 ### Others
+* Music service is built using Media 3 Exo player library
 * Images are loaded using [Coil][coil] library.
 
 ## Architecture
