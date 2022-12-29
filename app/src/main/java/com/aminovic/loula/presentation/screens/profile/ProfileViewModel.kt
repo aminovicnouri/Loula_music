@@ -2,13 +2,11 @@ package com.aminovic.loula.presentation.screens.profile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aminovic.loula.data.mappers.asSong
 import com.aminovic.loula.data.remote.dto.track.TrackDataDto
 import com.aminovic.loula.data.utils.PaginatorImpl
 import com.aminovic.loula.domain.repository.MusicRepository
-import com.aminovic.loula.domain.utils.MediaConstants
+import com.aminovic.loula.domain.use_case.PlayPauseListUseCase
 import com.aminovic.loula.domain.utils.Resource
-import com.aminovic.loula.exo_player.MusicServiceConnection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val repository: MusicRepository,
-    private val musicServiceConnection: MusicServiceConnection,
+    private val playPauseListUseCase: PlayPauseListUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProfileState())
@@ -37,29 +35,17 @@ class ProfileViewModel @Inject constructor(
         when (event) {
             is ProfileEvent.GetArtist -> getArtist(event.artistId)
             is ProfileEvent.InitiatePaginator -> initiatePaginator(event.query)
-            ProfileEvent.LoadNextItems -> loadNextItems()
+            is ProfileEvent.LoadNextItems -> loadNextItems()
             is ProfileEvent.PlaySound -> {
-                if (event.isRunning) {
-                    if (!event.playWhenReady) {
-                        musicServiceConnection.play()
-                    } else {
-                        musicServiceConnection.pause()
-                    }
-                } else {
-                    playSound(event.idx)
-                }
+                playPauseListUseCase(
+                    isRunning = event.isRunning,
+                    playWhenReady = event.playWhenReady,
+                    startIndex = event.idx,
+                    list = state.value.tracks
+                )
             }
         }
     }
-
-    fun play(startIndex: Int = MediaConstants.DEFAULT_INDEX) =
-        musicServiceConnection.playSongs(
-            songs = _state.value.tracks.map { it.asSong() },
-            startIndex = startIndex
-        )
-
-    fun shuffle() =
-        musicServiceConnection.shuffleSongs(songs = _state.value.tracks.map { it.asSong() })
 
     private fun getArtist(id: Int) {
         viewModelScope.launch {
@@ -81,40 +67,6 @@ class ProfileViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-
-    private fun getArtistTracks(id: Int) {
-        viewModelScope.launch {
-            _state.value = state.value.copy(
-                isLoading = true
-            )
-            repository.getArtistTrack(id).let { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        _state.value = state.value.copy(
-                            isLoading = false,
-                            errorMessage = result.message
-                        )
-                    }
-                    is Resource.Success -> {
-                        _state.value = state.value.copy(
-                            isLoading = false,
-                            errorMessage = null,
-                            tracks = result.data?.data ?: emptyList(),
-                            nextPage = result.data?.next
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    private fun playSound(index: Int) {
-        musicServiceConnection.playSongs(
-            songs = _state.value.tracks.map { it.asSong() },
-            startIndex = index
-        )
     }
 
     private fun initiatePaginator(query: String) {

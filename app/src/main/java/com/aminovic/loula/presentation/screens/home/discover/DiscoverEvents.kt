@@ -8,4 +8,6 @@ sealed class DiscoverEvents {
     data class OnSelectGenre(val genre: GenreDto) : DiscoverEvents()
     data class OnSelectAlbum(val album: AlbumDto) : DiscoverEvents()
     data class OnSelectArtist(val artist: ArtistDto) : DiscoverEvents()
+    data class PlaySound(val isRunning: Boolean, val playWhenReady: Boolean, val idx: Int) :
+        DiscoverEvents()
 }

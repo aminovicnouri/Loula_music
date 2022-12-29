@@ -4,7 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -40,17 +40,6 @@ fun DiscoverScreen(
                     scrollOffset / imageSize.toFloat()
                 }
                 else -> 1f
-            }
-        }
-    }
-
-    val firstItemTranslationY by remember {
-        derivedStateOf {
-            when {
-                lazyListState.layoutInfo.visibleItemsInfo.isNotEmpty() &&
-                        lazyListState.firstVisibleItemIndex == 0 ->
-                    lazyListState.firstVisibleItemScrollOffset * .6f
-                else -> 0f
             }
         }
     }
@@ -118,11 +107,28 @@ fun DiscoverScreen(
             }
 
             state.selectedAlbum?.tracks?.data?.let { tracks ->
-                items(tracks) { item: TrackDto ->
+                itemsIndexed(tracks) { index: Int, item: TrackDto ->
                     TrackListItem(
                         track = item,
-                        onClick = { navigateToPlayer() },
-                        playPauseTrack = { isRunning, playWhenReady, trackUrl ->
+                        onClick = { isRunning ->
+                            if (!isRunning)
+                                viewModel.onEvent(
+                                    DiscoverEvents.PlaySound(
+                                        isRunning = false,
+                                        playWhenReady = false,
+                                        idx = index
+                                    )
+                                )
+                            navigateToPlayer()
+                        },
+                        playPauseTrack = { isRunning, playWhenReady ->
+                            viewModel.onEvent(
+                                DiscoverEvents.PlaySound(
+                                    isRunning,
+                                    playWhenReady,
+                                    index
+                                )
+                            )
                         },
                         modifier = Modifier.fillMaxWidth(),
                         backgroundColor = MaterialTheme.colors.surface

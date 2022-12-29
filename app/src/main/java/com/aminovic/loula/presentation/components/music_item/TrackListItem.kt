@@ -41,7 +41,7 @@ fun TrackListItem(
     viewModel: SongItemViewModel = hiltViewModel(),
     track: TrackDto,
     onClick: (Boolean) -> Unit,
-    playPauseTrack: (Boolean, Boolean, String) -> Unit,
+    playPauseTrack: (Boolean, Boolean) -> Unit,
     backgroundColor: Color = Color.Transparent
 ) {
     val spacing = LocalSpacing.current
@@ -147,7 +147,7 @@ fun TrackListItem(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 24.dp)
                 ) {
-                    playPauseTrack(isRunning, musicState.playWhenReady, track.preview!!)
+                    playPauseTrack(isRunning, musicState.playWhenReady)
                 }
                 .size(32.dp)
                 .padding(spacing.spaceSmall)

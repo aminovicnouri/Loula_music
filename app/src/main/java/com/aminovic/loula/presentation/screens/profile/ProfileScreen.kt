@@ -102,7 +102,7 @@ fun ProfileScreen(
                             )
                         navigateToPlayer()
                     },
-                    playPauseTrack = { isRunning, playWhenReady, trackUrl ->
+                    playPauseTrack = { isRunning, playWhenReady ->
                         viewModel.onEvent(
                             ProfileEvent.PlaySound(
                                 isRunning = isRunning,

@@ -3,6 +3,7 @@ package com.aminovic.loula.presentation.screens.home.discover
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aminovic.loula.domain.repository.MusicRepository
+import com.aminovic.loula.domain.use_case.PlayPauseListUseCase
 import com.aminovic.loula.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private var repository: MusicRepository
+    private var repository: MusicRepository,
+    private val playPauseListUseCase: PlayPauseListUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DiscoverViewState())
@@ -60,6 +62,14 @@ class DiscoverViewModel @Inject constructor(
             is DiscoverEvents.OnSelectGenre -> {
                 _state.value = state.value.copy(
                     //  selectedGenre = event.genre,
+                )
+            }
+            is DiscoverEvents.PlaySound -> {
+                playPauseListUseCase(
+                    isRunning = event.isRunning,
+                    playWhenReady = event.playWhenReady,
+                    startIndex = event.idx,
+                    list = state.value.selectedAlbum?.tracks?.data ?: emptyList()
                 )
             }
             is DiscoverEvents.OnSelectAlbum -> {

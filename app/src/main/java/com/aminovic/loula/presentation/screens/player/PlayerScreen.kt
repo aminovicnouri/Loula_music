@@ -51,8 +51,6 @@ fun PlayerScreen(
 
     val spacing = LocalSpacing.current
 
-    val context = LocalContext.current
-
     val surfaceColor = MaterialTheme.colors.surface
     val dominantColorState = rememberDominantColorState { color ->
         // We want a color which has sufficient contrast against the surface color
@@ -82,8 +80,7 @@ fun PlayerScreen(
             Spacer(modifier = Modifier.height(spacing.spaceMediumLarge))
             PlayerImage(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                    .fillMaxWidth(),
                 trackImageUrl = musicState.currentSong.artworkUri,
             )
             Spacer(modifier = Modifier.height(spacing.spaceMediumLarge))
